@@ -1,0 +1,95 @@
+# Real Neofetch for Ubuzerant OS
+# Reads actual system information
+
+color cyan
+print "         _,met$$$$$gg.          "
+color reset
+exec echo -n "$(whoami)@$(hostname)"
+print ""
+
+color cyan
+print "      ,g$$$$$$$$$$$$$$$P.       "
+color yellow
+print "-------------------"
+
+color cyan
+print "    ,g$$P\"     \"\"\"Y$$.\"        "
+color reset
+exec echo -n "OS: "
+exec cat /etc/os-release | grep PRETTY_NAME | cut -d'"' -f2
+
+color cyan
+print "   ,$$P'              `$$$.     "
+color reset
+exec echo -n "Host: "
+exec cat /sys/devices/virtual/dmi/id/product_name 2>/dev/null || echo "Virtual Machine"
+
+color cyan
+print "  ',$$P       ,ggs.     `$$b:   "
+color reset
+exec echo -n "Kernel: "
+exec uname -r
+
+color cyan
+print "  `d$$'     ,$P\"'   .    $$$    "
+color reset
+exec echo -n "Uptime: "
+exec uptime -p | sed 's/up //'
+
+color cyan
+print "   $$P      d$'     ,    $$P    "
+color reset
+exec echo -n "Packages: "
+exec echo -n "$(dpkg -l | grep ^ii | wc -l) (dpkg), "
+exec ls -1 ./buzerant_packages/ 2>/dev/null | wc -l | xargs echo -n
+print " (buzerant)"
+
+color cyan
+print "   $$:      $$.   -    ,d$$'    "
+color reset
+exec echo -n "Shell: "
+exec echo $SHELL | rev | cut -d'/' -f1 | rev
+
+color cyan
+print "   $$;      Y$b._   _,d$P'      "
+color reset
+exec echo -n "Resolution: "
+exec xdpyinfo 2>/dev/null | grep dimensions | awk '{print $2}' || echo "N/A"
+
+color cyan
+print "   Y$$.    `.`\"Y$$$$P\"'         "
+color reset
+exec echo -n "DE: "
+exec echo ${XDG_CURRENT_DESKTOP:-N/A}
+
+color cyan
+print "   `$$b      \"-.__              "
+color reset
+exec echo -n "WM: "
+exec echo ${XDG_SESSION_TYPE:-N/A}
+
+color cyan
+print "    `Y$$                        "
+color reset
+exec echo -n "Terminal: "
+exec echo ${TERM:-unknown}
+
+color cyan
+print "     `Y$$.                      "
+color reset
+exec echo -n "CPU: "
+exec cat /proc/cpuinfo | grep "model name" | head -1 | cut -d':' -f2 | xargs
+
+color cyan
+print "       `$$b.                    "
+color reset
+exec echo -n "GPU: "
+exec lspci 2>/dev/null | grep VGA | cut -d':' -f3 | xargs || echo "N/A"
+
+color cyan
+print "         `Y$$b.                 "
+color reset
+exec echo -n "Memory: "
+exec free -m | awk 'NR==2{printf "%sMB / %sMB\n", $3, $2}'
+
+color reset
