@@ -1,68 +1,63 @@
-#!/usr/bin/env bash
+clear
+color red
+print ""
+print ""
+print "    ██╗   ██╗██████╗ ██╗   ██╗███████╗███████╗██████╗  █████╗ ███╗   ██╗████████╗"
+print "    ██║   ██║██╔══██╗██║   ██║╚══███╔╝██╔════╝██╔══██╗██╔══██╗████╗  ██║╚══██╔══╝"
+print "    ██║   ██║██████╔╝██║   ██║  ███╔╝ █████╗  ██████╔╝███████║██╔██╗ ██║   ██║   "
+print "    ██║   ██║██╔══██╗██║   ██║ ███╔╝  ██╔══╝  ██╔══██╗██╔══██║██║╚██╗██║   ██║   "
+print "    ╚██████╔╝██████╔╝╚██████╔╝███████╗███████╗██║  ██║██║  ██║██║ ╚████║   ██║   "
+print "     ╚═════╝ ╚═════╝  ╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝   ╚═╝   "
+color reset
+print ""
+color bold
+color magenta
+print "=== System Information ==="
+color reset
 
-# Farbené výstupy
-cyan="\e[36m"
-yellow="\e[33m"
-reset="\e[0m"
+color cyan
+print "User:    "
+color green
+exec grep user_name buzerant_config.txt | cut -d= -f2
+color reset
 
-echo -e "${cyan}         _,met$$$$$gg.          ${reset}"
-echo -e "$(whoami)@$(hostname)"
+color blue
+print "Host:    "
+color yellow
+exec grep pc_name buzerant_config.txt | cut -d= -f2
+color reset
 
-echo -e "${cyan}      ,g$$$$$$$$$$$$$$$P.       ${reset}"
-echo -e "${yellow}-------------------${reset}"
+color magenta
+print "OS:      "
+color cyan
+exec echo $UBZ_OS
+color reset
 
-echo -e "${cyan}    ,g$$P\"     \"\"\"Y$$.\"        ${reset}"
-echo -n "OS: "
-grep PRETTY_NAME /etc/os-release | cut -d'"' -f2
+color green
+print "Kernel:  "
+color white
+exec echo $UBZ_KERNEL
+color reset
 
-echo -e "${cyan}   ,$$P'              \`$$$.     ${reset}"
-echo -n "Host: "
-cat /sys/devices/virtual/dmi/id/product_name 2>/dev/null || echo "Virtual Machine"
+color yellow
+print "Uptime:  "
+color blue
+exec echo $UBZ_UPTIME
+color reset
 
-echo -e "${cyan}  ',$$P       ,ggs.     \`$$b:   ${reset}"
-echo -n "Kernel: "
-uname -r
+color cyan
+print "Memory:  "
+color magenta
+exec free -h | awk '/Mem/{print $3 " / " $2}'
+color reset
 
-echo -e "${cyan}  \`d$$'     ,$P\"'   .    $$$    ${reset}"
-echo -n "Uptime: "
-uptime -p | sed 's/up //'
+color white
+print "Shell:   "
+color green
+exec echo $SHELL
+color reset
 
-echo -e "${cyan}   $$P      d$'     ,    $$P    ${reset}"
-echo -n "Packages: "
-echo -n "$(dpkg -l | grep ^ii | wc -l) (dpkg), "
-ls -1 ./buzerant_packages/ 2>/dev/null | wc -l | xargs echo -n
-echo " (buzerant)"
-
-echo -e "${cyan}   $$:      $$.   -    ,d$$'    ${reset}"
-echo -n "Shell: "
-basename "$SHELL"
-
-echo -e "${cyan}   $$;      Y$b._   _,d$P'      ${reset}"
-echo -n "Resolution: "
-xdpyinfo 2>/dev/null | grep dimensions | awk '{print $2}' || echo "N/A"
-
-echo -e "${cyan}   Y$$.    \`.\`\"Y$$$$P\"'         ${reset}"
-echo -n "DE: "
-echo "${XDG_CURRENT_DESKTOP:-N/A}"
-
-echo -e "${cyan}   \`$$b      \"-.__              ${reset}"
-echo -n "WM: "
-echo "${XDG_SESSION_TYPE:-N/A}"
-
-echo -e "${cyan}    \`Y$$                        ${reset}"
-echo -n "Terminal: "
-echo "${TERM:-unknown}"
-
-echo -e "${cyan}     \`Y$$.                      ${reset}"
-echo -n "CPU: "
-grep "model name" /proc/cpuinfo | head -1 | cut -d':' -f2 | xargs
-
-echo -e "${cyan}       \`$$b.                    ${reset}"
-echo -n "GPU: "
-lspci 2>/dev/null | grep VGA | cut -d':' -f3 | xargs || echo "N/A"
-
-echo -e "${cyan}         \`Y$$b.                 ${reset}"
-echo -n "Memory: "
-free -m | awk 'NR==2{printf "%sMB / %sMB\n", $3, $2}'
-
-echo -e "${reset}"
+print ""
+color red
+print "Have a truly colorful day, Ubuzerant user!"
+color reset
